@@ -17,6 +17,14 @@ namespace Balanovici_Cristina_Lab10
             InitializeComponent();
         }
 
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+            var shopl = (ShopList)BindingContext;
+
+            listView.ItemsSource = await App.Database.GetListProductsAsync(shopl.ID);
+        }
+
         async void OnSaveButtonClicked(object sender, EventArgs e)
         {
             var slist = (ShopList)BindingContext;
@@ -29,6 +37,15 @@ namespace Balanovici_Cristina_Lab10
             var slist = (ShopList)BindingContext;
             await App.Database.DeleteShopListAsync(slist);
             await Navigation.PopAsync();
+        }
+        async void OnChooseButtonClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new ProductPage((ShopList)
+           this.BindingContext)
+            {
+                BindingContext = new Product()
+            });
+
         }
     }
 }
